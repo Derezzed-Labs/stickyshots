@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="dark transition-colors duration-300 ease-in-out" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>StickyShots</title>
+  <!-- Material Symbols -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Tailwind Theme Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#bec2ff",
+            "charcoal-darker": "#121214",
+            "inverse-primary": "#3f4cda",
+            "on-tertiary-fixed-variant": "#004c6e",
+            "border-subtle": "rgba(255, 255, 255, 0.08)",
+            "on-secondary-fixed-variant": "#4f319c",
+            "obsidian": "#0B0B0C",
+            "charcoal-light": "#1C1C1F",
+            "inverse-surface": "#e5e2e3",
+            "on-secondary-fixed": "#21005e",
+            "on-primary-fixed-variant": "#222fc2",
+            "on-primary-container": "#fffdff",
+            "outline-variant": "#454655",
+            "secondary": "#cebdff",
+            "surface-container-low": "#1c1b1c",
+            "on-secondary-container": "#bea8ff",
+            "tertiary-fixed": "#c9e6ff",
+            "outline": "#8f8fa0",
+            "on-background": "#e5e2e3",
+            "on-surface-variant": "#c6c5d7",
+            "on-primary": "#000da4",
+            "primary-fixed": "#e0e0ff",
+            "secondary-container": "#4f319c",
+            "primary-container": "#5865f2",
+            "on-primary-fixed": "#000569",
+            "surface-container": "#201f20",
+            "surface-container-highest": "#353436",
+            "on-tertiary-container": "#fffdff",
+            "secondary-fixed": "#e8ddff",
+            "background": "#131314",
+            "surface-variant": "#353436",
+            "border-highlight": "rgba(255, 255, 255, 0.15)",
+            "error": "#ffb4ab",
+            "tertiary-container": "#007db2",
+            "surface": "#131314",
+            "tertiary-fixed-dim": "#89ceff",
+            "on-tertiary": "#00344d",
+            "surface-dim": "#131314",
+            "on-error": "#690005",
+            "on-surface": "#e5e2e3",
+            "on-error-container": "#ffdad6",
+            "electric-blue": "#5865F2",
+            "on-tertiary-fixed": "#001e2f",
+            "on-secondary": "#381385",
+            "error-container": "#93000a",
+            "surface-tint": "#bec2ff",
+            "vibrant-violet": "#A78BFA",
+            "inverse-on-surface": "#313031",
+            "surface-bright": "#3a393a",
+            "surface-container-lowest": "#0e0e0f",
+            "primary": "#bec2ff",
+            "secondary-fixed-dim": "#cebdff",
+            "tertiary": "#89ceff",
+            "surface-container-high": "#2a2a2b"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1.5rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "20px",
+            "xl": "32px",
+            "xs": "4px",
+            "sm": "8px",
+            "md": "16px",
+            "unit": "4px",
+            "gutter": "16px",
+            "lg": "24px"
+          },
+          "fontFamily": {
+            "sans": [
+              "-apple-system",
+              "BlinkMacSystemFont",
+              "\"SF Pro Text\"",
+              "\"SF Pro Display\"",
+              "\"Segoe UI\"",
+              "Roboto",
+              "Helvetica",
+              "Arial",
+              "sans-serif"
+            ]
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: theme('colors.outline-variant');
+        border-radius: theme('borderRadius.full');
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: theme('colors.outline');
+      }
+    }
+    
+    /* Ensure global smooth transition for dark mode */
+    html, body, main, header, div {
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 300ms;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-white dark:bg-background text-gray-900 dark:text-on-surface flex h-screen overflow-hidden font-sans antialiased selection:bg-electric-blue/30 selection:text-white transition-colors duration-300 ease-in-out">
+  <!-- Main Content Area -->
+  <main
+    class="flex-1 flex flex-col h-full overflow-hidden bg-gray-50 dark:bg-obsidian relative w-full transition-colors duration-300 ease-in-out">
+    <!-- TopAppBar Component -->
+    <header
+      class="flex flex-col w-full px-8 pt-6 pb-6 sticky top-0 z-40 bg-gray-50/80 dark:bg-obsidian/80 backdrop-blur-xl transition-all duration-300 ease-in-out border-b border-gray-200 dark:border-border-subtle select-none cursor-default"
+      style="-webkit-app-region: drag;">
+
+      <!-- Top Row: Brand & Window Controls -->
+      <div class="flex justify-between items-center w-full mb-6">
+        <!-- App Brand Title -->
+        <div
+          class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-on-surface lowercase pointer-events-none select-none">
+          stickyshots</div>
+
+        <!-- Window Controls -->
+        <div class="flex items-center gap-2" style="-webkit-app-region: no-drag;">
+          <button id="minBtn"
+            class="flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#ffbd2e] hover:brightness-95 active:brightness-90 border border-black/10 dark:border-black/30 transition-all focus:outline-none shadow-sm"
+            title="Minimize">
+            <svg class="w-1.5 h-1.5 text-[#5c3e00] dark:text-[#5c3e00]/80" viewBox="0 0 6 6" fill="none"
+              stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+              <path d="M1 3H5" />
+            </svg>
+          </button>
+          <button id="maxBtn"
+            class="flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#27c93f] hover:brightness-95 active:brightness-90 border border-black/10 dark:border-black/30 transition-all focus:outline-none shadow-sm"
+            title="Maximize">
+            <svg class="w-1.5 h-1.5 text-[#004d05] dark:text-[#004d05]/80" viewBox="0 0 6 6" fill="none"
+              stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+              <path d="M3 1V5M1 3H5" />
+            </svg>
+          </button>
+          <button id="closeBtn"
+            class="flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#ff5f56] hover:brightness-95 active:brightness-90 border border-black/10 dark:border-black/30 transition-all focus:outline-none shadow-sm"
+            title="Close">
+            <svg class="w-1.5 h-1.5 text-[#4c0002] dark:text-[#4c0002]/80" viewBox="0 0 6 6" fill="none"
+              stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+              <path d="M1.5 1.5L4.5 4.5M4.5 1.5L1.5 4.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Section Title & Actions -->
+      <div class="flex justify-between items-end w-full">
+        <div class="flex flex-col gap-1" style="-webkit-app-region: no-drag;">
+          <span
+            class="text-xl font-semibold text-gray-900 dark:text-on-surface tracking-tight transition-colors duration-300 ease-in-out">library</span>
+          <p class="text-xs text-gray-600 dark:text-on-surface-variant transition-colors duration-300 ease-in-out">all
+            images from this session.</p>
+        </div>
+        <div class="flex items-center gap-md" style="-webkit-app-region: no-drag;">
+          <!-- Theme Switch -->
+          <div class="flex items-center gap-2 mr-2">
+            <span
+              class="material-symbols-outlined text-gray-900 dark:text-on-surface-variant text-sm transition-colors duration-300 ease-in-out">light_mode</span>
+            <button id="themeToggle"
+              class="relative inline-flex h-5 w-9 items-center rounded-full bg-gray-300 dark:bg-surface-variant/50 transition-colors focus:outline-none cursor-pointer"
+              role="switch" aria-checked="true">
+              <span id="themeToggleThumb"
+                class="inline-block h-3 w-3 transform rounded-full bg-white transition-transform duration-300 ease-in-out translate-x-5"></span>
+            </button>
+            <span
+              class="material-symbols-outlined text-gray-400 dark:text-on-surface text-sm transition-colors duration-300 ease-in-out">dark_mode</span>
+          </div>
+
+          <!-- Clear Library Button -->
+          <button id="clearLibraryBtn"
+            class="px-5 py-2 text-sm font-medium text-gray-700 dark:text-on-surface-variant hover:text-gray-900 dark:hover:text-on-surface border border-gray-300 dark:border-border-subtle rounded-full hover:bg-gray-200 dark:hover:bg-surface-variant/30 transition-all duration-200 ease-in-out">
+            clear library
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Empty State -->
+    <div id="empty"
+      class="flex-1 flex items-center justify-center text-gray-600 dark:text-on-surface-variant text-sm transition-colors duration-300 ease-in-out"
+      style="display: none;">
+      oh no! looks like there are no images yet.
+    </div>
+
+    <!-- Library Canvas (Grid) -->
+    <div class="flex-1 overflow-y-auto px-8 pb-12 pt-8 custom-scrollbar relative">
+      <!-- Fluid Grid Container -->
+      <div id="gallery"
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 max-w-[1800px] mx-auto">
+      </div>
+    </div>
+  </main>
+
+  <script src="library.js"></script>
+</body>
+
+</html>

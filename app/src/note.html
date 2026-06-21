@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Sticky Note</title>
+<style>
+  :root {
+    color-scheme: dark;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    overflow: hidden;
+    user-select: none;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  #card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    box-shadow:
+      0 1px 1px rgba(0,0,0,0.3),
+      0 6px 20px rgba(0,0,0,0.45);
+    transition: box-shadow 0.12s ease;
+    cursor: grab;
+  }
+
+  #card.dragging {
+    cursor: grabbing;
+    box-shadow:
+      0 4px 10px rgba(0,0,0,0.35),
+      0 18px 40px rgba(0,0,0,0.55);
+    transition: none;
+  }
+
+  /* thin border like the Spotify PiP card */
+  #card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.14);
+    pointer-events: none;
+  }
+
+  #img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+
+  /* Top control strip - mirrors Spotify's PiP top bar:
+     drag-handle dots on the left, action buttons on the right,
+     both fade in only on hover, no title/label row */
+  #top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 6px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.45), transparent);
+    z-index: 5;
+  }
+  #card:hover #top-bar {
+    opacity: 1;
+  }
+
+  #drag-handle {
+    width: 20px;
+    height: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2px;
+    place-items: center;
+    -webkit-app-region: drag;
+    cursor: grab;
+  }
+  #drag-handle span {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
+  }
+
+  #toolbar {
+    display: flex;
+    gap: 4px;
+  }
+
+  .btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.45);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    line-height: 22px;
+    text-align: center;
+    cursor: pointer;
+    -webkit-app-region: no-drag;
+  }
+  .btn:hover {
+    background: rgba(0,0,0,0.7);
+  }
+  .btn.close:hover {
+    background: #e25555;
+    color: white;
+  }
+  .btn.locked {
+    background: #d6473a;
+    color: white;
+  }
+
+  /* Resize handle */
+  #resize-handle {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+    -webkit-app-region: no-drag;
+    z-index: 5;
+  }
+
+  #card.locked {
+    cursor: default;
+  }
+</style>
+</head>
+<body>
+  <div id="card">
+    <div id="top-bar">
+      <div id="drag-handle">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+      <div id="toolbar">
+        <button class="btn" id="lockBtn" title="Lock position">📌</button>
+        <button class="btn" id="dupBtn" title="Duplicate">⧉</button>
+        <button class="btn" id="downloadBtn" title="Download">⬇</button>
+        <button class="btn close" id="closeBtn" title="Remove">✕</button>
+      </div>
+    </div>
+    <img id="img" draggable="false" />
+    <div id="resize-handle"></div>
+  </div>
+
+  <script src="note-renderer.js"></script>
+</body>
+</html>

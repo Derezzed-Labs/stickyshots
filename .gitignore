@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Electron builds
+electron-app/dist/
+electron-app/release/
+electron-app/.env
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build output
+dist/
+build/
+out/
+
+# Chrome extension specific
+chrome-extension/node_modules/
+
+# Scratch & temporary task files
+task.md
+implementation_plan.md
+walkthrough.md
+scratchpad_design.html

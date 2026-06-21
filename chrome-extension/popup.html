@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style>
+  body {
+    width: 240px;
+    margin: 0;
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #fffdf6;
+    color: #2a2a2a;
+  }
+  h1 {
+    font-size: 14px;
+    margin: 0 0 4px 0;
+  }
+  p.sub {
+    font-size: 12px;
+    color: #777;
+    margin: 0 0 14px 0;
+  }
+  #status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    background: #f1f1ec;
+  }
+  #dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #999;
+    flex-shrink: 0;
+  }
+  #dot.online { background: #3fb950; }
+  #dot.offline { background: #e25555; }
+  .hint {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #888;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+  <h1>StickyShots</h1>
+  <p class="sub">Right-click any image → Send to StickyShots</p>
+  <div id="status">
+    <div id="dot"></div>
+    <span id="status-text">Checking app status…</span>
+  </div>
+  <p class="hint">Make sure the StickyShots desktop app is open in the background for images to land on screen.</p>
+  <script src="popup.js"></script>
+</body>
+</html>
