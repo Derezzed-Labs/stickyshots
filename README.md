@@ -1,4 +1,8 @@
-StickyShots
+# stickyshots
+
+![Release](https://img.shields.io/github/v/release/aadidoesitbetter/stickyshots)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Chrome Extension](https://img.shields.io/badge/chrome-web%20store-red)
 
 Float any image as a draggable sticky note on top of any app, anywhere on your screen.
 
@@ -6,7 +10,19 @@ Right-click any image on the web → it appears as a floating, draggable, resiza
 
 No cloud. No accounts. Everything stays on your machine.
 
-Features
+![StickyShots Showcase](demo.png)
+
+## Quick Start
+- **[Download App (Windows)](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_release.exe)**
+- **[Download Chrome Extension](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)**
+- **[View Releases](https://github.com/aadidoesitbetter/stickyshots/releases)**
+
+## Why StickyShots?
+- **Need a reference image while coding?** Float it.
+- **Designing with inspiration boards?** Float them all.
+- **Research without alt-tabbing?** Float links as images.
+
+## Features
 
 - Drag any image from the web — right-click → "Send to StickyShots"
 - Floats above everything — even fullscreen games and apps
@@ -16,14 +32,14 @@ Features
 - Completely private — all data stays local, no syncing, no tracking
 - Intuitive controls — drag, resize, lock position, duplicate, download
 
-Installation
+## Installation
 
 Option 1: Download Pre-Built (Recommended for most users)
 
 1. Download the latest release assets:
-   - Windows App: [stickyshots_release.exe](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0-dev/stickyshots_release.exe)
-   - Chrome Extension: [stickyshots_extension.zip](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0-dev/stickyshots_extension.zip)
-   - Developers (Full Source): [stickyshots_dev_release.zip](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0-dev/stickyshots_dev_release.zip)
+   - Windows App: [stickyshots_release.exe](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_release.exe)
+   - Chrome Extension: [stickyshots_extension.zip](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)
+   - Developers (Full Source): [stickyshots_dev_release.zip](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_dev_release.zip)
 
 2. Install the Chrome extension:
    - Download and extract `stickyshots_extension.zip` to a folder on your computer
