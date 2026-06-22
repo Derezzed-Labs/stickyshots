@@ -2,11 +2,11 @@
 
 ![Release](https://img.shields.io/github/v/release/aadidoesitbetter/stickyshots)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Chrome Extension](https://img.shields.io/badge/chrome-web%20store-red)
+![Stars](https://img.shields.io/github/stars/aadidoesitbetter/stickyshots?style=social)
 
 Float any image as a draggable sticky note on top of any app, anywhere on your screen.
 
-Right-click any image on the web → it appears as a floating, draggable, resizable sticky note that hovers above every application on your desktop. Perfect for reference images, inspiration boards, or quick visual lookups.
+Right click any image on the web → it appears as a floating, draggable, resizable sticky note that hovers above every application on your desktop. Perfect for reference images, inspiration boards, or quick visual lookups.
 
 No cloud. No accounts. Everything stays on your machine.
 
@@ -24,13 +24,12 @@ No cloud. No accounts. Everything stays on your machine.
 
 ## Features
 
-- Drag any image from the web — right-click → "Send to StickyShots"
-- Floats above everything — even fullscreen games and apps
-- Auto-fits to image size — no awkward cropping or padding
-- Sleek, minimal UI — inspired by Spotify's picture-in-picture
-- Session-based library — images live in memory, download what you want to keep
-- Completely private — all data stays local, no syncing, no tracking
-- Intuitive controls — drag, resize, lock position, duplicate, download
+- Floats above everything, even fullscreen games and apps
+- Auto fits to image size, no awkward cropping or padding
+- Sleek, minimal UI 
+- Session-based library, images live in memory, download what you want to keep
+- Completely private all data stays local, no syncing, no tracking
+- Intuitive controls drag, resize, lock position, duplicate, download
 
 ## Installation
 
@@ -152,10 +151,10 @@ stickyshots/
 
 Key Technologies
 
-- Electron — cross-platform desktop framework
-- Node.js — HTTP server, IPC, file I/O
-- Chrome Extensions API (MV3) — context menus, messaging
-- HTML/CSS/JavaScript — UI rendering
+- Electron: cross-platform desktop framework
+- Node.js: HTTP server, IPC, file I/O
+- Chrome Extensions API (MV3): context menus, messaging
+- HTML/CSS/JavaScript: UI rendering
 
 Contributing
 
@@ -166,17 +165,9 @@ Pull requests welcome! Areas to improve:
 - [ ] Keyboard shortcuts
 - [ ] Hotkey to toggle library
 - [ ] Auto-screenshot capability
-- [ ] Dark/light theme toggle
-- [ ] Localization
 
 License
 
 MIT — build on top of this, use it however you want.
-
-Made by
-
-Aadi — [aadidoesitbetter.com](https://aadidoesitbetter.com)
-
----
 
 Questions? Open an issue on GitHub.
