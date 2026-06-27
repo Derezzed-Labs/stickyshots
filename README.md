@@ -1,8 +1,8 @@
 # stickyshots
 
-![Release](https://img.shields.io/github/v/release/Derezzed-Labs/stickyshots)
+![Release](https://img.shields.io/github/v/release/aadidoesitbetter/stickyshots)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Stars](https://img.shields.io/github/stars/Derezzed-Labs/stickyshots?style=social)
+![Stars](https://img.shields.io/github/stars/aadidoesitbetter/stickyshots?style=social)
 
 Float any image as a draggable sticky note on top of any app, anywhere on your screen.
 
@@ -13,9 +13,9 @@ No cloud. No accounts. Everything stays on your machine.
 ![StickyShots Showcase](app/assets/template.png)
 
 ## Quick Start
-- **[Download App (Windows)](https://github.com/Derezzed-Labs/stickyshots/releases/download/v1.0.0/stickyshots.exe)**
-- **[Download Chrome Extension](https://github.com/Derezzed-Labs/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)**
-- **[View Releases](https://github.com/Derezzed-Labs/stickyshots/releases)**
+- **[Download App (Windows)](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots.exe)**
+- **[Download Chrome Extension](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)**
+- **[View Releases](https://github.com/aadidoesitbetter/stickyshots/releases)**
 
 ## Why StickyShots?
 - **Need a reference image while coding?** Float it.
@@ -36,9 +36,9 @@ No cloud. No accounts. Everything stays on your machine.
 Option 1: Download Pre-Built (Recommended for most users)
 
 1. Download the latest release assets:
-   - Windows App: [stickyshots.exe](https://github.com/Derezzed-Labs/stickyshots/releases/download/v1.0.0/stickyshots.exe)
-   - Chrome Extension: [stickyshots_extension.zip](https://github.com/Derezzed-Labs/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)
-   - Developers (Full Source): [stickyshots_dev_release.zip](https://github.com/Derezzed-Labs/stickyshots/releases/download/v1.0.0/stickyshots_dev_release.zip)
+   - Windows App: [stickyshots.exe](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots.exe)
+   - Chrome Extension: [stickyshots_extension.zip](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)
+   - Developers (Full Source): [stickyshots_dev_release.zip](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_dev_release.zip)
 
 2. Install the Chrome extension:
    - Download and extract `stickyshots_extension.zip` to a folder on your computer
@@ -54,7 +54,7 @@ Option 2: Build from Source (For developers)
 
 ```bash
 # Clone the repo
-git clone https://github.com/Derezzed-Labs/stickyshots.git
+git clone https://github.com/aadidoesitbetter/stickyshots.git
 cd stickyshots
 
 # Install dependencies
@@ -84,14 +84,14 @@ Usage
 
 On the Desktop App
 
-- Drag — click and hold anywhere on the note (slight tilt animation)
-- Resize — drag the bottom-right corner
-- Lock — pins the note in place (hover to see controls)
-- Duplicate — creates a copy
-- Download — save the image to disk
-- Close — removes the note (image stays in library until you close the app)
-- Library — right-click tray icon → "Open Library" to see all images, re-pin, or download
-- Check for Updates — (currently in progress, coming in the next version)
+- Drag: click and hold anywhere on the note (slight tilt animation)
+- Resize: drag the bottom-right corner
+- Lock: pins the note in place (hover to see controls)
+- Duplicate: creates a copy
+- Download: save the image to disk
+- Close: removes the note (image stays in library until you close the app)
+- Library: right-click tray icon → "Open Library" to see all images, re-pin, or download
+- Check for Updates: (currently in progress, coming in the next version)
 
 From the Browser
 
@@ -165,9 +165,3 @@ Pull requests welcome! Areas to improve:
 - [ ] Keyboard shortcuts
 - [ ] Hotkey to toggle library
 - [ ] Auto-screenshot capability
-
-License
-
-MIT — build on top of this, use it however you want.
-
-Questions? Open an issue on GitHub.
