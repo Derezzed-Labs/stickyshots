@@ -28,6 +28,10 @@ npm-debug.log*
 dist/
 build/
 out/
+app/release/
+stickyshots.exe
+stickyshots_dev_release.zip
+stickyshots_extension.zip
 
 # Chrome extension specific
 chrome-extension/node_modules/

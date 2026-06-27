@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('library', {
   },
   download: (id) => ipcRenderer.send('library-download', id),
   repin: (id) => ipcRenderer.send('library-repin', id),
+  deleteItem: (id) => ipcRenderer.send('library-delete-item', id),
   bringToFront: () => ipcRenderer.send('library-bring-to-front'),
   clearLibrary: () => ipcRenderer.send('library-clear'),
   minimize: () => ipcRenderer.send('library-minimize'),

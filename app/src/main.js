@@ -60,6 +60,7 @@ async function findOpenPort() {
 // ---- In-memory image library (cleared on app close) ----
 const imageLibrary = new Map(); // id -> { dataUrl, mimeType, timestamp }
 const deletionTimers = new Map(); // id -> setTimeout handle (3-hour grace period)
+const layoutState = new Map(); // id -> { x, y, width, height, locked, rotation }
 
 const IMAGE_RETENTION_MS = 3 * 60 * 60 * 1000; // 3 hours
 
@@ -122,10 +123,28 @@ function createNoteWindow(id, mimeType, opts = {}) {
     } else {
       win.show();
     }
+
+    // Capture position after the window is fully resolved/shown
+    setTimeout(() => {
+      if (!win.isDestroyed()) {
+        const [x, y] = win.getPosition();
+        const [width, height] = win.getSize();
+        const currentLayout = layoutState.get(id) || {};
+        layoutState.set(id, {
+          ...currentLayout,
+          x,
+          y,
+          width,
+          height
+        });
+      }
+    }, 100);
   });
 
   win.on('moved', () => {
     const [x, y] = win.getPosition();
+    const currentLayout = layoutState.get(id) || {};
+    layoutState.set(id, { ...currentLayout, x, y });
     const state = getSessionState();
     if (state[id]) state[id].x = x;
     if (state[id]) state[id].y = y;
@@ -133,6 +152,8 @@ function createNoteWindow(id, mimeType, opts = {}) {
   });
   win.on('resized', () => {
     const [width, height] = win.getSize();
+    const currentLayout = layoutState.get(id) || {};
+    layoutState.set(id, { ...currentLayout, width, height });
     const state = getSessionState();
     if (state[id]) state[id].width = width;
     if (state[id]) state[id].height = height;
@@ -140,11 +161,13 @@ function createNoteWindow(id, mimeType, opts = {}) {
   });
   win.on('closed', () => {
     noteWindows.delete(id);
+    if (appQuitting) return; // Guard during quit
     // Image stays in library for 3 hours, then auto-deletes
     if (!deletionTimers.has(id)) {
       const timer = setTimeout(() => {
         imageLibrary.delete(id);
         deletionTimers.delete(id);
+        layoutState.delete(id);
         broadcastLibraryUpdate();
       }, IMAGE_RETENTION_MS);
       deletionTimers.set(id, timer);
@@ -233,7 +256,15 @@ function broadcastLibraryUpdate() {
 // ---- Local HTTP server: receives images from Chrome extension ----
 function startServer() {
   server = http.createServer((req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    const origin = req.headers['origin'];
+    // CORS origin verification: strictly allow extension origins or direct CLI requests (no Origin header)
+    if (origin && !origin.startsWith('chrome-extension://')) {
+      res.writeHead(403, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: 'Forbidden' }));
+      return;
+    }
+
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS, GET');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -267,7 +298,7 @@ function startServer() {
             fetchImageServerSide(imageUrl, (err, fetchedDataUrl) => {
               if (err) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ ok: false, error: 'Failed to fetch image: ' + err }));
+                res.end(JSON.stringify({ ok: false, error: 'Failed to fetch image: ' + err.message }));
                 return;
               }
               processImage(fetchedDataUrl, mimeType, res);
@@ -310,13 +341,28 @@ function startServer() {
 // ---- Helper: process image and create note ----
 function processImage(dataUrl, mimeType, res) {
   const id = crypto.randomUUID();
+  let detectedMime = mimeType;
+  if (!detectedMime) {
+    const match = dataUrl.match(/^data:([^;]+);/);
+    if (match) detectedMime = match[1];
+  }
+  detectedMime = detectedMime || 'image/png';
+
   imageLibrary.set(id, {
     dataUrl,
-    mimeType: mimeType || 'image/png',
+    mimeType: detectedMime,
     timestamp: Date.now(),
   });
 
-  createNoteWindow(id, mimeType || 'image/png', {});
+  // Default layout options
+  layoutState.set(id, {
+    width: 280,
+    height: 280,
+    locked: false,
+    rotation: 0
+  });
+
+  createNoteWindow(id, detectedMime, {});
   broadcastLibraryUpdate();
 
   res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -324,7 +370,12 @@ function processImage(dataUrl, mimeType, res) {
 }
 
 // ---- Helper: fetch image server-side to bypass CORS ----
-function fetchImageServerSide(imageUrl, callback) {
+function fetchImageServerSide(imageUrl, callback, redirectCount = 0) {
+  if (redirectCount > 5) {
+    callback(new Error('Too many redirects'));
+    return;
+  }
+
   const https = require('https');
   const fetchModule = imageUrl.startsWith('https') ? https : require('http');
 
@@ -335,13 +386,34 @@ function fetchImageServerSide(imageUrl, callback) {
   };
 
   fetchModule.get(imageUrl, options, (res) => {
+    // Follow HTTP redirects recursively
+    if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+      try {
+        const redirectUrl = new URL(res.headers.location, imageUrl).href;
+        fetchImageServerSide(redirectUrl, callback, redirectCount + 1);
+      } catch (err) {
+        callback(err);
+      }
+      return;
+    }
+
     if (res.statusCode !== 200) {
       callback(new Error(`HTTP ${res.statusCode}`));
       return;
     }
 
     let chunks = [];
-    res.on('data', (chunk) => chunks.push(chunk));
+    let size = 0;
+    res.on('data', (chunk) => {
+      size += chunk.length;
+      if (size > 20 * 1024 * 1024) { // 20MB limit
+        res.destroy();
+        callback(new Error('Image size exceeds 20MB limit'));
+        return;
+      }
+      chunks.push(chunk);
+    });
+
     res.on('end', () => {
       try {
         const buffer = Buffer.concat(chunks);
@@ -363,19 +435,31 @@ ipcMain.on('note-close', (e, id) => {
 });
 
 ipcMain.on('note-toggle-lock', (e, id, locked) => {
+  const currentLayout = layoutState.get(id) || {};
+  layoutState.set(id, { ...currentLayout, locked: !!locked });
+  
   const state = getSessionState();
   if (state[id]) state[id].locked = locked;
 });
 
 ipcMain.on('note-rotate', (e, id, rotation) => {
+  const currentLayout = layoutState.get(id) || {};
+  layoutState.set(id, { ...currentLayout, rotation: Number(rotation) || 0 });
+  
   const state = getSessionState();
   if (state[id]) state[id].rotation = rotation;
 });
 
-ipcMain.on('note-resize-from-corner', (e, id, { width, height }) => {
+ipcMain.on('note-resize-from-corner', (e, id, size) => {
   const win = noteWindows.get(id);
-  if (win) {
-    win.setSize(Math.round(width), Math.round(height));
+  if (win && size && typeof size.width === 'number' && typeof size.height === 'number') {
+    const w = Math.round(size.width);
+    const h = Math.round(size.height);
+    if (w > 0 && h > 0) {
+      win.setSize(w, h);
+      const currentLayout = layoutState.get(id) || {};
+      layoutState.set(id, { ...currentLayout, width: w, height: h });
+    }
   }
 });
 
@@ -383,12 +467,30 @@ ipcMain.on('note-duplicate', (e, id) => {
   const imgData = imageLibrary.get(id);
   if (!imgData) return;
   const newId = crypto.randomUUID();
-  imageLibrary.set(newId, imgData);
+  imageLibrary.set(newId, {
+    dataUrl: imgData.dataUrl,
+    mimeType: imgData.mimeType,
+    timestamp: Date.now(),
+  });
+  
   const win = noteWindows.get(id);
   const [x, y] = win ? win.getPosition() : [100, 100];
+  const [width, height] = win ? win.getSize() : [280, 280];
+  
+  layoutState.set(newId, {
+    x: x + 24,
+    y: y + 24,
+    width,
+    height,
+    locked: false,
+    rotation: 0
+  });
+
   createNoteWindow(newId, imgData.mimeType, {
     x: x + 24,
     y: y + 24,
+    width,
+    height,
   });
   broadcastLibraryUpdate();
 });
@@ -413,6 +515,8 @@ ipcMain.on('note-fit-to-image', (e, id, { naturalWidth, naturalHeight }) => {
   height = Math.max(MIN_DIM, height);
 
   win.setSize(width, height);
+  const currentLayout = layoutState.get(id) || {};
+  layoutState.set(id, { ...currentLayout, width, height });
 });
 
 ipcMain.on('note-download', async (e, id) => {
@@ -478,8 +582,23 @@ ipcMain.on('library-bring-to-front', () => bringAllNotesToFront());
 ipcMain.on('library-clear', () => {
   for (const win of [...noteWindows.values()]) win.close();
   imageLibrary.clear();
+  layoutState.clear();
   for (const timer of deletionTimers.values()) clearTimeout(timer);
   deletionTimers.clear();
+  broadcastLibraryUpdate();
+});
+
+ipcMain.on('library-delete-item', (e, id) => {
+  const win = noteWindows.get(id);
+  if (win) win.close();
+
+  if (deletionTimers.has(id)) {
+    clearTimeout(deletionTimers.get(id));
+    deletionTimers.delete(id);
+  }
+
+  imageLibrary.delete(id);
+  layoutState.delete(id);
   broadcastLibraryUpdate();
 });
 
@@ -518,10 +637,12 @@ ipcMain.on('library-repin', (e, id) => {
     deletionTimers.delete(id);
   }
   if (noteWindows.has(id)) {
-    noteWindows.get(id).focus();
+    // Toggle: if active, close it (unpins it)
+    noteWindows.get(id).close();
     return;
   }
-  createNoteWindow(id, imgData.mimeType, {});
+  const layout = layoutState.get(id) || {};
+  createNoteWindow(id, imgData.mimeType, layout);
 });
 
 // ---- Bring notes (restores closed notes from library) ----
@@ -532,7 +653,8 @@ function bringNotes() {
         clearTimeout(deletionTimers.get(id));
         deletionTimers.delete(id);
       }
-      createNoteWindow(id, imgData.mimeType, {});
+      const layout = layoutState.get(id) || {};
+      createNoteWindow(id, imgData.mimeType, layout);
     }
   }
   bringAllNotesToFront();
@@ -628,6 +750,7 @@ app.on('before-quit', () => {
   for (const timer of deletionTimers.values()) clearTimeout(timer);
   deletionTimers.clear();
   imageLibrary.clear();
+  layoutState.clear();
 });
 
 const gotLock = app.requestSingleInstanceLock();

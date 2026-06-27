@@ -1,30 +1,44 @@
 const BASE_URL = 'http://127.0.0.1';
 const DEFAULT_PORT = 8743;
-let cachedPort = DEFAULT_PORT;
+let cachedPort = null;
 
 // ---- Detect the actual port the Electron app is using ----
 async function getAppPort() {
-  if (cachedPort && cachedPort !== DEFAULT_PORT) {
-    return cachedPort; // use cached port if we already found a non-default one
+  if (cachedPort) {
+    try {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), 300);
+      const res = await fetch(`${BASE_URL}:${cachedPort}/ping`, { signal: controller.signal });
+      clearTimeout(id);
+      if (res.ok) {
+        return cachedPort;
+      }
+    } catch {
+      cachedPort = null; // Cache is stale
+    }
   }
 
   // Try to ping the app and extract the port from the response
   for (let port = DEFAULT_PORT; port <= 8800; port++) {
     try {
-      const res = await fetch(`${BASE_URL}:${port}/ping`, { timeout: 500 });
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), 300);
+      const res = await fetch(`${BASE_URL}:${port}/ping`, { signal: controller.signal });
+      clearTimeout(id);
       if (res.ok) {
         const data = await res.json();
         if (data.port) {
           cachedPort = data.port;
           return data.port;
         }
+        cachedPort = port;
         return port;
       }
     } catch {
       // port not available, try next
     }
   }
-  throw new Error('StickyShots app not found on any port');
+  throw new Error('StickyShots app not found. Make sure the desktop app is running.');
 }
 
 // Create the right-click context menu item on install

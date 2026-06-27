@@ -99,7 +99,7 @@ function renderGallery() {
         </button>
         
         <!-- Delete visually present, mapped to unpin or just visual -->
-        <button class="pointer-events-auto flex items-center justify-center w-8 h-8 rounded-full bg-black/50 text-error hover:bg-black/70 backdrop-blur-md transition-colors" title="Delete">
+        <button onclick="deleteImg('${img.id}'); event.stopPropagation();" class="pointer-events-auto flex items-center justify-center w-8 h-8 rounded-full bg-black/50 text-error hover:bg-black/70 backdrop-blur-md transition-colors" title="Delete">
           <span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span>
         </button>
       </div>
@@ -114,4 +114,8 @@ function downloadImg(id) {
 
 function repin(id) {
   window.library.repin(id);
+}
+
+function deleteImg(id) {
+  window.library.deleteItem(id);
 }
