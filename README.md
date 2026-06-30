@@ -1,8 +1,8 @@
 # stickyshots
 
-![Release](https://img.shields.io/github/v/release/aadidoesitbetter/stickyshots)
+![Release](https://img.shields.io/github/v/release/derezzedlabs/stickyshots)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Stars](https://img.shields.io/github/stars/aadidoesitbetter/stickyshots?style=social)
+![Stars](https://img.shields.io/github/stars/derezzedlabs/stickyshots?style=social)
 
 Float any image as a draggable sticky note on top of any app, anywhere on your screen.
 
@@ -13,9 +13,9 @@ No cloud. No accounts. Everything stays on your machine.
 ![StickyShots Showcase](app/assets/template.png)
 
 ## Quick Start
-- **[Download App (Windows)](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots.exe)**
-- **[Download Chrome Extension](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)**
-- **[View Releases](https://github.com/aadidoesitbetter/stickyshots/releases)**
+- **[Download App (Windows)](https://github.com/derezzedlabs/stickyshots/releases/download/v1.0.0/stickyshots.exe)**
+- **[Download Chrome Extension](https://github.com/derezzedlabs/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)**
+- **[View Releases](https://github.com/derezzedlabs/stickyshots/releases)**
 
 ## Why StickyShots?
 - **Need a reference image while coding?** Float it.
@@ -36,9 +36,9 @@ No cloud. No accounts. Everything stays on your machine.
 Option 1: Download Pre-Built (Recommended for most users)
 
 1. Download the latest release assets:
-   - Windows App: [stickyshots.exe](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots.exe)
-   - Chrome Extension: [stickyshots_extension.zip](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)
-   - Developers (Full Source): [stickyshots_dev_release.zip](https://github.com/aadidoesitbetter/stickyshots/releases/download/v1.0.0/stickyshots_dev_release.zip)
+   - Windows App: [stickyshots.exe](https://github.com/derezzedlabs/stickyshots/releases/download/v1.0.0/stickyshots.exe)
+   - Chrome Extension: [stickyshots_extension.zip](https://github.com/derezzedlabs/stickyshots/releases/download/v1.0.0/stickyshots_extension.zip)
+   - Developers (Full Source): [stickyshots_dev_release.zip](https://github.com/derezzedlabs/stickyshots/releases/download/v1.0.0/stickyshots_dev_release.zip)
 
 2. Install the Chrome extension:
    - Download and extract `stickyshots_extension.zip` to a folder on your computer
@@ -54,7 +54,7 @@ Option 2: Build from Source (For developers)
 
 ```bash
 # Clone the repo
-git clone https://github.com/aadidoesitbetter/stickyshots.git
+git clone https://github.com/derezzedlabs/stickyshots.git
 cd stickyshots
 
 # Install dependencies
